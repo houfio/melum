@@ -1,5 +1,5 @@
+import { redirect } from '@remix-run/node';
 import { Scopes, SpotifyApi } from '@spotify/web-api-ts-sdk';
-import { redirect } from '@vercel/remix';
 
 export async function getSpotify(require = true) {
   const sdk = SpotifyApi.withUserAuthorization(
