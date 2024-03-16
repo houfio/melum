@@ -8,6 +8,8 @@ import 'modern-normalize';
 
 import './root.scss';
 
+export const config = { runtime: 'edge' };
+
 export default function App() {
   return (
     <html lang="en">
