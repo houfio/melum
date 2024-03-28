@@ -27,7 +27,7 @@ $colors: (
     500: (#454545, #efefef)
   ),
   green: (
-    200: #1ed760
+    200: (#1ed760, #1ed760)
   )
 );
 
@@ -39,11 +39,7 @@ $colors: (
 
   @each $color, $shades in $colors {
     @each $shade, $hex in $shades {
-      @if type-of($hex) != 'list' {
-        --#{$color + ""}-#{$shade}: #{$hex};
-      } @else {
-        --#{$color + ""}-#{$shade}: #{nth($hex, $index)};
-      }
+      --#{$color + ""}-#{$shade}: #{nth($hex, $index)};
     }
   }
 }

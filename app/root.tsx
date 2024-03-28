@@ -1,16 +1,11 @@
-import {
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration
-} from '@remix-run/react';
-import 'modern-normalize';
+import { Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import type { PropsWithChildren } from 'react';
 
 import './root.scss';
 
 export const config = { runtime: 'edge' };
 
-export default function App() {
+export function Layout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <head>
@@ -19,7 +14,7 @@ export default function App() {
         <Meta/>
       </head>
       <body>
-        <Outlet/>
+        {children}
         <ScrollRestoration/>
         <Scripts/>
       </body>
@@ -27,18 +22,16 @@ export default function App() {
   );
 }
 
+export default function App() {
+  return (
+    <Outlet/>
+  );
+}
+
 export function HydrateFallback() {
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <Meta/>
-      </head>
-      <body>
-        Loading...
-        <Scripts/>
-      </body>
-    </html>
+    <span>
+      Loading...
+    </span>
   );
 }
