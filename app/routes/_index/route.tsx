@@ -1,7 +1,5 @@
-import type { MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import type { ClientLoaderFunctionArgs } from '@remix-run/react';
-import { Form } from '@remix-run/react';
+import type { MetaFunction , ClientLoaderFunctionArgs } from '@remix-run/react';
+import { redirect , Form } from '@remix-run/react';
 
 import styles from './route.module.scss';
 

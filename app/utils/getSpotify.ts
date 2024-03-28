@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/react';
 import { Scopes, SpotifyApi } from '@spotify/web-api-ts-sdk';
 
 export async function getSpotify(require = true) {
