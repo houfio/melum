@@ -1,11 +1,11 @@
-@import "modern-normalize";
-@import "utils";
+@use "modern-normalize";
+@use "utils";
 
 :root {
-  @include with-colors(light);
+  @include utils.with-colors(light);
 
   @media (prefers-color-scheme: dark) {
-    @include with-colors(dark);
+    @include utils.with-colors(dark);
   }
 }
 
