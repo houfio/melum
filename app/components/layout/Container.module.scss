@@ -1,4 +1,4 @@
-@import "../../utils";
+@use "../../utils";
 
 .container {
   display: flex;
@@ -6,8 +6,8 @@
   width: 100%;
   margin: 0 auto;
 
-  @each $breakpoint, $width in $breakpoints {
-    @include with-breakpoint($breakpoint) {
+  @each $breakpoint, $width in utils.$breakpoints {
+    @include utils.with-breakpoint($breakpoint) {
       width: #{if($width > 0, #{$width - 1}rem, calc(100% - 1rem))};
     }
   }
