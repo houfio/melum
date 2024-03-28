@@ -1,7 +1,10 @@
 import { Outlet, redirect, useLoaderData } from '@remix-run/react';
 
+import styles from './route.module.scss';
+
 import { usePlayer } from '~/hooks/usePlayer';
 import { Header } from '~/routes/app/Header';
+import { Player } from '~/routes/app/Player';
 import { getSpotify } from '~/utils/getSpotify';
 
 export const clientLoader = async () => {
@@ -24,9 +27,10 @@ export default function App() {
   return (
     <usePlayer.Provider token={token}>
       <Header/>
-      <main>
+      <main className={styles.main}>
         <Outlet/>
       </main>
+      <Player/>
     </usePlayer.Provider>
   );
 }

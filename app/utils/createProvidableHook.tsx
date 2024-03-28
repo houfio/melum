@@ -6,7 +6,7 @@ export function createProvidableHook<T, P>(fn: (props: P) => T) {
   const useHook = () => {
     const value = useContext(context);
 
-    if (!value) {
+    if (value === undefined) {
       throw new Error('Context not defined');
     }
 
