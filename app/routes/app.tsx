@@ -1,5 +1,6 @@
 import { useLoaderData } from '@remix-run/react';
 
+import { Avatar } from '~/components/Avatar';
 import { getSpotify } from '~/utils/getSpotify';
 
 export const clientLoader = async () => {
@@ -9,11 +10,12 @@ export const clientLoader = async () => {
 };
 
 export default function App() {
-  const { display_name } = useLoaderData<typeof clientLoader>();
+  const profile = useLoaderData<typeof clientLoader>();
 
   return (
     <span>
-      Hello, {display_name}
+      Hello, {profile.display_name}
+      <Avatar profile={profile}/>
     </span>
   );
 }
