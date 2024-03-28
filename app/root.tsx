@@ -1,9 +1,13 @@
-import { Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { Meta, type MetaFunction, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 import type { PropsWithChildren } from 'react';
 
 import './root.scss';
 
 export const config = { runtime: 'edge' };
+
+export const meta: MetaFunction = () => [
+  { title: 'Melum' }
+];
 
 export function Layout({ children }: PropsWithChildren) {
   return (
