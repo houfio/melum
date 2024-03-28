@@ -3,8 +3,8 @@ import { Form, redirect } from '@remix-run/react';
 
 import styles from './route.module.scss';
 
+import { Button } from '~/components/form/Button';
 import { Container } from '~/components/layout/Container';
-import { Grid } from '~/components/layout/Grid';
 import { getSpotify } from '~/utils/getSpotify';
 
 export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
@@ -34,16 +34,8 @@ export default function Index() {
       <div className={styles.heading}>
         Melum
       </div>
-      <Grid columns={{ phone: 1, tablet: 2, laptop: 3, desktop: 4 }} gaps={{ tablet: 1, laptop: 2, desktop: 3 }}>
-        <span>Anna</span>
-        <span>is</span>
-        <span>the</span>
-        <span>best</span>
-      </Grid>
       <Form method="post">
-        <button type="submit">
-          Login
-        </button>
+        <Button text="Login" type="submit"/>
       </Form>
     </Container>
   );

@@ -1,0 +1,11 @@
+.button {
+  padding: 0;
+  color: var(--on-accent);
+  background-color: var(--accent);
+  border: none;
+  appearance: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

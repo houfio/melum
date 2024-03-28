@@ -13,12 +13,13 @@ type Props = {
 export function Grid({ columns = {}, gaps = {}, ...props }: Props & ComponentPropsWithoutRef<'div'>) {
   return (
     <div
+      {...props}
       className={clsx(
         styles.grid,
         mapStyles(styles, columns, 'columns-$key-$value'),
-        mapStyles(styles, gaps, 'gaps-$key-$value')
+        mapStyles(styles, gaps, 'gaps-$key-$value'),
+        props.className
       )}
-      {...props}
     />
   );
 }
