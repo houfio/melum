@@ -1,11 +1,17 @@
 .button {
-  padding: 0;
+  padding: .5rem .75rem;
   color: var(--on-accent);
   background-color: var(--accent);
-  border: none;
+  border: 1px solid var(--accent-outline);
+  border-radius: .5rem;
   appearance: none;
 
   &:hover {
+    background-color: var(--accent-hover);
     cursor: pointer;
+  }
+
+  &:active {
+    background-color: var(--accent-active);
   }
 }

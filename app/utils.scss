@@ -11,6 +11,42 @@ $breakpoints: (
   desktop: 75
 );
 
+$colors: (
+  gray: (
+    colors: #ffffff #121212,
+    shades: 0 100 200 300 400 500
+  ),
+  green: (
+    colors: #1fdf64 #169c46,
+    shades: 100 200 300 400 500
+  ),
+  red: (
+    colors: #ffbaba #a70000,
+    shades: 100 200 300
+  )
+);
+
+$tokens: (
+  background: (
+    light: gray 0,
+    dark: gray 500
+  ),
+  on-background: (
+    light: gray 500,
+    dark: gray 0
+  ),
+  accent: green 300,
+  on-accent: gray 500,
+  accent-outline: green 500,
+  accent-hover: green 200,
+  accent-active: green 100,
+  surface: (
+    light: gray 100,
+    dark: gray 400
+  ),
+  on-surface: on-background
+);
+
 @mixin with-breakpoint($breakpoint) {
   $width: map.get($breakpoints, $breakpoint);
 
@@ -49,35 +85,6 @@ $breakpoints: (
   @return $result;
 }
 
-$palette: generate-palette((
-  gray: (
-    colors: #ffffff #454545,
-    shades: 0 100 200 300 400 500
-  ),
-  green: (
-    colors: #1ed760 #1ed760,
-    shades: 200
-  )
-));
-
-$tokens: (
-  background: (
-    light: gray 0,
-    dark: gray 500
-  ),
-  on-background: (
-    light: gray 500,
-    dark: gray 0
-  ),
-  accent: green 200,
-  on-accent: gray 500,
-  surface: (
-    light: gray 100,
-    dark: gray 400
-  ),
-  on-surface: on-background
-);
-
 @function get-color($token, $theme) {
   $colors: map.get($tokens, $token);
   $color: if(meta.type-of($colors) == 'map', map.get($colors, $theme), $colors);
@@ -90,6 +97,8 @@ $tokens: (
 }
 
 @mixin with-colors($theme) {
+  $palette: generate-palette($colors);
+
   @each $token in map.keys($tokens) {
     $color: get-color($token, $theme);
 
