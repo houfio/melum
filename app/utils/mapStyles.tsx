@@ -1,6 +1,6 @@
-import type { Breakpoint } from '~/types';
+import type { Breakpoints } from '~/types';
 
-export function mapStyles(styles: CSSModuleClasses, object: Record<Breakpoint, unknown>, template: string) {
+export function mapStyles(styles: CSSModuleClasses, object: Breakpoints<string | number>, template: string) {
   const entries = Object.entries(object);
 
   return entries.map(([key, value]) => {
