@@ -1,4 +1,4 @@
-import { faWaveform } from '@fortawesome/pro-solid-svg-icons';
+import { faArrowRightFromBracket, faWaveform } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form } from '@remix-run/react';
 
@@ -19,7 +19,7 @@ export function Header() {
         Melum
         <div className={styles.spacer}/>
         <Form action="/logout">
-          <Button text="Logout" type="submit"/>
+          <Button text="Logout" icon={faArrowRightFromBracket} type="submit"/>
         </Form>
         <Avatar profile={profile}/>
       </Container>

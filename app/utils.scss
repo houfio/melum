@@ -5,10 +5,10 @@
 @use "sass:meta";
 
 $breakpoints: (
-  phone: 0,
-  tablet: 37.5,
-  laptop: 56.25,
-  desktop: 75
+  phone: 0rem,
+  tablet: 37.5rem,
+  laptop: 56.25rem,
+  desktop: 75rem
 );
 
 $colors: (
@@ -51,7 +51,7 @@ $tokens: (
   $width: map.get($breakpoints, $breakpoint);
 
   @if $width > 0 {
-    @media (min-width: #{$width}rem) {
+    @media (min-width: #{$width}) {
       @content
     }
   } @else {
