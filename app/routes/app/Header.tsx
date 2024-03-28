@@ -13,8 +13,8 @@ export function Header() {
   const profile = useProfile();
 
   return (
-    <Container>
-      <header className={styles.header}>
+    <header className={styles.header}>
+      <Container className={styles.container}>
         <FontAwesomeIcon icon={faWaveform}/>
         Melum
         <div className={styles.spacer}/>
@@ -22,7 +22,7 @@ export function Header() {
           <Button text="Logout" type="submit"/>
         </Form>
         <Avatar profile={profile}/>
-      </header>
-    </Container>
+      </Container>
+    </header>
   );
 }

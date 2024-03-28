@@ -1,16 +1,11 @@
-.header {
+.player {
   position: sticky;
-  top: 0;
+  bottom: 0;
   backdrop-filter: blur(16px);
 }
 
 .container {
   flex-direction: row !important;
-  align-items: center;
-  gap: .5rem;
+  justify-content: center;
   padding: .5rem 0;
-}
-
-.spacer {
-  flex: 1;
 }
