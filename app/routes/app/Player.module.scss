@@ -1,0 +1,11 @@
+.player {
+  position: sticky;
+  bottom: 0;
+  backdrop-filter: blur(16px);
+}
+
+.container {
+  flex-direction: row !important;
+  justify-content: center;
+  padding: .5rem 0;
+}

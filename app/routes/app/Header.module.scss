@@ -1,5 +1,11 @@
 .header {
-  display: flex;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(16px);
+}
+
+.container {
+  flex-direction: row !important;
   align-items: center;
   gap: .5rem;
   padding: .5rem 0;
