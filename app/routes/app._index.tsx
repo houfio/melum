@@ -1,7 +1,11 @@
+import { usePlayer } from '~/hooks/usePlayer';
+
 export default function AppIndex() {
+  const [, ready] = usePlayer();
+
   return (
     <div>
-      index
+      {ready ? 'ready' : 'not ready'} to play music
     </div>
   );
 }
