@@ -1,11 +1,15 @@
+import { Button } from '~/components/form/Button';
 import { usePlayer } from '~/hooks/usePlayer';
 
 export default function AppIndex() {
-  const [, ready] = usePlayer();
+  const [player, state] = usePlayer();
 
   return (
     <div>
-      {ready ? 'ready' : 'not ready'} to play music
+      <Button text="Toggle play" onClick={() => player?.togglePlay()}/>
+      <pre>
+        {JSON.stringify(state, undefined, 2)}
+      </pre>
     </div>
   );
 }

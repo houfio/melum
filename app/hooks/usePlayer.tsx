@@ -8,6 +8,7 @@ type Props = {
 
 export const usePlayer = createProvidableHook(({ token }: Props) => {
   const [player, setPlayer] = useState<Spotify.Player>();
+  const [state, setState] = useState<Spotify.PlaybackState>();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -20,7 +21,7 @@ export const usePlayer = createProvidableHook(({ token }: Props) => {
 
     window.onSpotifyWebPlaybackSDKReady = () => {
       setPlayer(new window.Spotify.Player({
-        name: 'Web Playback SDK',
+        name: 'Melum',
         getOAuthToken: (cb) => cb(token)
       }));
     };
@@ -35,8 +36,9 @@ export const usePlayer = createProvidableHook(({ token }: Props) => {
       return;
     }
 
+    player.addListener('player_state_changed', (state) => setState(state));
     player.addListener('ready', () => setReady(true));
-    player.addListener('not_ready', ({ device_id }) => setReady(false));
+    player.addListener('not_ready', () => setReady(false));
     player.connect();
 
     return () => {
@@ -44,5 +46,5 @@ export const usePlayer = createProvidableHook(({ token }: Props) => {
     };
   }, [player]);
 
-  return [player, ready] as const;
+  return [player, state, ready] as const;
 });
