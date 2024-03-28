@@ -2,6 +2,7 @@
 @use "sass:list";
 @use "sass:map";
 @use "sass:math";
+@use "sass:meta";
 
 $breakpoints: (
   phone: 0,
@@ -22,20 +23,7 @@ $breakpoints: (
   }
 }
 
-$colors: (
-  gray: (
-    light: #ffffff #454545,
-    dark: #1f1f1f #efefef,
-    shades: 0 100 200 300 400 500
-  ),
-  green: (
-    light: #1ed760 #1ed760,
-    dark: #1ed760 #1ed760,
-    shades: 200
-  )
-);
-
-@function generate-palette($start, $end, $shades) {
+@function generate-shades($start, $end, $shades) {
   $result: ();
   $length: list.length($shades);
   $min: math.min($shades...);
@@ -49,14 +37,62 @@ $colors: (
   @return $result;
 }
 
-@mixin with-colors($theme) {
-  @each $color, $config in $colors {
-    $colors: map.get($config, $theme);
-    $shades: map.get($config, shades);
-    $palette: generate-palette(list.nth($colors, 1), list.nth($colors, 2), $shades);
+@function generate-palette($colors) {
+  $result: ();
 
-    @each $shade, $hex in $palette {
-      --#{$color + ""}-#{$shade}: #{$hex};
-    }
+  @each $color, $config in $colors {
+    $colors: map.get($config, colors);
+    $shades: map.get($config, shades);
+    $result: map.set($result, $color, generate-shades(list.nth($colors, 1), list.nth($colors, 2), $shades));
+  }
+
+  @return $result;
+}
+
+$palette: generate-palette((
+  gray: (
+    colors: #ffffff #454545,
+    shades: 0 100 200 300 400 500
+  ),
+  green: (
+    colors: #1ed760 #1ed760,
+    shades: 200
+  )
+));
+
+$tokens: (
+  background: (
+    light: gray 0,
+    dark: gray 500
+  ),
+  on-background: (
+    light: gray 500,
+    dark: gray 0
+  ),
+  accent: green 200,
+  on-accent: gray 500,
+  surface: (
+    light: gray 100,
+    dark: gray 400
+  ),
+  on-surface: on-background
+);
+
+@function get-color($token, $theme) {
+  $colors: map.get($tokens, $token);
+  $color: if(meta.type-of($colors) == 'map', map.get($colors, $theme), $colors);
+
+  @if meta.type-of($color) == 'string' {
+    $color: get-color($color, $theme);
+  }
+
+  @return $color;
+}
+
+@mixin with-colors($theme) {
+  @each $token in map.keys($tokens) {
+    $color: get-color($token, $theme);
+
+    --#{$token}: #{map.get(map.get($palette, list.nth($color, 1)), list.nth($color, 2))};
   }
 }
