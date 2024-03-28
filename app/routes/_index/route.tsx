@@ -1,4 +1,4 @@
-import type { ClientLoaderFunctionArgs, MetaFunction } from '@remix-run/react';
+import type { ClientLoaderFunctionArgs } from '@remix-run/react';
 import { Form, redirect } from '@remix-run/react';
 
 import styles from './route.module.scss';
@@ -6,12 +6,6 @@ import styles from './route.module.scss';
 import { Container } from '~/components/layout/Container';
 import { Grid } from '~/components/layout/Grid';
 import { getSpotify } from '~/utils/getSpotify';
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: 'Melum' }
-  ];
-};
 
 export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
   const sdk = await getSpotify(false);
