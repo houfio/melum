@@ -1,11 +1,5 @@
-@use "sass:map";
-@use "../utils";
-
 .wrapper {
-  width: 100%;
-  max-width: #{map.get(utils.$breakpoints, tablet) - 1};
   max-height: 25rem;
-  margin: 0 auto;
   padding: 0 .5rem .5rem;
   color: var(--on-surface);
   background-color: var(--surface);
