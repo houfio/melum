@@ -1,0 +1,61 @@
+@use "sass:map";
+@use "../utils";
+
+.wrapper {
+  width: 100%;
+  max-width: #{map.get(utils.$breakpoints, tablet) - 1};
+  max-height: 25rem;
+  margin: 0 auto;
+  padding: 0 .5rem .5rem;
+  color: var(--on-surface);
+  background-color: var(--surface);
+  border-radius: 1rem;
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.head {
+  position: sticky;
+  top: 0;
+  padding: 1rem .5rem .5rem;
+  color: var(--on-surface-subtle);
+  background-color: var(--surface);
+  font-weight: normal;
+  text-align: start;
+
+  &.shrink {
+    width: 0;
+  }
+}
+
+.clickable {
+  &:hover {
+    cursor: pointer;
+
+    &  > .item {
+      background-color: var(--surface-hover);
+    }
+  }
+
+  &:active > .item {
+    background-color: var(--surface-click);
+  }
+}
+
+.item {
+  padding: .5rem;
+
+  &:first-child {
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+  }
+
+  &:last-child {
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+  }
+}

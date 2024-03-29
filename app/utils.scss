@@ -36,22 +36,28 @@ $tokens: (
     dark: gray 0
   ),
 
-  accent: green 300,
+  accent: green 200,
   on-accent: gray 500,
-  accent-hover: green 200,
-  accent-active: green 100,
+  accent-hover: green 100,
+  accent-click: green 300,
 
   surface: (
     light: gray 50,
     dark: gray 450
   ),
   on-surface: on-background,
-
-  surface-variant: (
-    light: gray 50,
-    dark: gray 450
+  on-surface-subtle: (
+    light: gray 300,
+    dark: gray 200
   ),
-  on-surface-variant: on-background
+  surface-hover: (
+    light: gray 100,
+    dark: gray 400
+  ),
+  surface-click: (
+    light: gray 200,
+    dark: gray 300
+  )
 );
 
 @mixin with-breakpoint($breakpoint) {

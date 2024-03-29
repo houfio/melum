@@ -2,6 +2,7 @@ import { Outlet, redirect, useLoaderData } from '@remix-run/react';
 
 import styles from './route.module.scss';
 
+import { Container } from '~/components/layout/Container';
 import { usePlayer } from '~/hooks/usePlayer';
 import { Header } from '~/routes/app/Header';
 import { Player } from '~/routes/app/Player';
@@ -28,7 +29,9 @@ export default function App() {
     <usePlayer.Provider token={token}>
       <Header/>
       <main className={styles.main}>
-        <Outlet/>
+        <Container>
+          <Outlet/>
+        </Container>
       </main>
       <Player/>
     </usePlayer.Provider>

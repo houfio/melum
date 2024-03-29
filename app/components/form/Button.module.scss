@@ -2,6 +2,7 @@
 @use "../../utils";
 
 .button {
+  position: relative;
   padding: .5rem;
   color: var(--on-accent);
   background-color: var(--accent);
@@ -15,7 +16,7 @@
   }
 
   &:active {
-    background-color: var(--accent-active);
+    background-color: var(--accent-click);
   }
 
   &:disabled {
@@ -45,4 +46,15 @@
       }
     }
   }
+}
+
+.loading {
+  visibility: hidden;
+}
+
+.spinner {
+  position: absolute;
+  top: calc(50% - .5rem);
+  left: calc(50% - .5rem);
+  pointer-events: none;
 }
