@@ -14,7 +14,7 @@ $breakpoints: (
 $colors: (
   gray: (
     colors: #ffffff #121212,
-    shades: 0 100 200 300 400 500
+    shades: 0 50 100 200 300 400 450 500
   ),
   green: (
     colors: #1fdf64 #169c46,
@@ -35,16 +35,23 @@ $tokens: (
     light: gray 500,
     dark: gray 0
   ),
+
   accent: green 300,
   on-accent: gray 500,
-  accent-outline: green 500,
   accent-hover: green 200,
   accent-active: green 100,
+
   surface: (
-    light: gray 100,
-    dark: gray 400
+    light: gray 50,
+    dark: gray 450
   ),
-  on-surface: on-background
+  on-surface: on-background,
+
+  surface-variant: (
+    light: gray 50,
+    dark: gray 450
+  ),
+  on-surface-variant: on-background
 );
 
 @mixin with-breakpoint($breakpoint) {

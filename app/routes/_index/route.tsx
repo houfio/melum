@@ -1,10 +1,12 @@
+import { faGithub, faSpotify } from '@fortawesome/free-brands-svg-icons';
+import { faWaveform } from '@fortawesome/pro-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ClientLoaderFunctionArgs } from '@remix-run/react';
 import { Form, redirect } from '@remix-run/react';
 
 import styles from './route.module.scss';
 
 import { Button } from '~/components/form/Button';
-import { Container } from '~/components/layout/Container';
 import { getSpotify } from '~/utils/getSpotify';
 
 export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
@@ -30,13 +32,20 @@ export const clientAction = async () => {
 
 export default function Index() {
   return (
-    <Container>
-      <div className={styles.heading}>
-        Melum
+    <div className={styles.content}>
+      <div className={styles.box}>
+        <span className={styles.title}>
+          <FontAwesomeIcon icon={faWaveform}/> Melum
+        </span>
+        Guess what song is playing after only hearing a second of it! Uses the Spotify api to fetch playlists and play
+        music.
+        <Form method="post" className={styles.form}>
+          <Button text="Login with Spotify" icon={faSpotify} type="submit"/>
+        </Form>
       </div>
-      <Form method="post">
-        <Button text="Login" type="submit"/>
-      </Form>
-    </Container>
+      <a href="https://github.com/houfio/melum" target="_blank" rel="noreferrer" className={styles.link}>
+        <FontAwesomeIcon icon={faGithub}/> GitHub
+      </a>
+    </div>
   );
 }

@@ -1,4 +1,35 @@
-.heading {
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: .5rem;
+  max-width: 15rem;
   color: var(--on-surface);
   background-color: var(--surface);
+  border-radius: .75rem;
+}
+
+.title {
+  margin: 1rem 0 .5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  margin-top: 1rem;
+  color: inherit;
+  text-decoration: none;
 }
