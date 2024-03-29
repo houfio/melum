@@ -22,6 +22,20 @@
   color: var(--on-surface-subtle);
 }
 
-.selected {
-  color: var(--accent);
+.selection {
+  padding: .25rem;
+  color: var(--on-background);
+  background-color: var(--background);
+  border-radius: .25rem;
+  white-space: nowrap;
+  float: right;
+
+  &.selected {
+    color: var(--on-accent);
+    background-color: var(--accent);
+  }
+}
+
+.icon {
+  margin-right: .25rem;
 }

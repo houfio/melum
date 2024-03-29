@@ -61,10 +61,13 @@ export default function AppIndex() {
               const s = selected.includes(item.uri);
 
               return (
-                <FontAwesomeIcon
-                  icon={s ? faSquareCheck : faSquareXmark}
-                  className={clsx(s && styles.selected)}
-                />
+                <span className={clsx(styles.selection, s && styles.selected)}>
+                  <FontAwesomeIcon
+                    icon={s ? faSquareCheck : faSquareXmark}
+                    className={clsx(styles.icon)}
+                  />
+                  {s ? 'Selected' : 'Not selected'}
+                </span>
               );
             }
           }]}
