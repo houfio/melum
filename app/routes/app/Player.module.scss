@@ -4,7 +4,8 @@
 .player {
   position: sticky;
   bottom: 0;
-  backdrop-filter: blur(16px);
+  color: var(--on-background);
+  background-color: var(--background);
 }
 
 .container {
