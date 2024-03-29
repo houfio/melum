@@ -13,7 +13,7 @@ export const usePlayer = createProvidableHook(({ token }: Props) => {
   const tokenRef = useRef(token);
   const [player, setPlayer] = useState<Spotify.Player>();
   const [state, setState] = useState<Spotify.PlaybackState>();
-  const [ready, setReady] = useState(false);
+  const [deviceId, setDeviceId] = useState<string>();
 
   tokenRef.current = token;
 
@@ -28,8 +28,8 @@ export const usePlayer = createProvidableHook(({ token }: Props) => {
     });
 
     player.addListener('player_state_changed', (state) => setState(state));
-    player.addListener('ready', () => setReady(true));
-    player.addListener('not_ready', () => setReady(false));
+    player.addListener('ready', ({ device_id }) => setDeviceId(device_id));
+    player.addListener('not_ready', () => setDeviceId(undefined));
 
     player.connect()
       .then((success) => success && setPlayer(player));
@@ -48,7 +48,7 @@ export const usePlayer = createProvidableHook(({ token }: Props) => {
 
     player.getCurrentState()
       .then((state) => setState(state ?? undefined));
-  }, ready ? 1000 : null);
+  }, deviceId ? 1000 : null);
 
-  return [player, state, ready] as const;
+  return [player, state, deviceId] as const;
 });
