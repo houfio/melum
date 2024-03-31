@@ -4,8 +4,14 @@
 :root {
   @include utils.with-colors(light);
 
-  @media (prefers-color-scheme: dark) {
+  &.dark {
     @include utils.with-colors(dark);
+  }
+
+  &:not(.light) {
+    @media (prefers-color-scheme: dark) {
+      @include utils.with-colors(dark);
+    }
   }
 }
 

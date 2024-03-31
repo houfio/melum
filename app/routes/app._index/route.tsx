@@ -1,5 +1,7 @@
 import { faPlay, faSquareCheck, faSquareXmark } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { count } from '@nanostores/i18n';
+import { useStore } from '@nanostores/react';
 import type { ClientActionFunctionArgs, ClientLoaderFunctionArgs} from '@remix-run/react';
 import { redirect , Form, useLoaderData } from '@remix-run/react';
 import { clsx } from 'clsx';
@@ -11,8 +13,19 @@ import styles from './route.module.scss';
 import { Table } from '~/components/Table';
 import { Button } from '~/components/form/Button';
 import { useProfile } from '~/hooks/useProfile';
+import { i18n } from '~/stores/i18n';
 import { getImage } from '~/utils/getImage';
 import { getSpotify } from '~/utils/getSpotify';
+
+const messages = i18n('playlists', {
+  start: count({
+    one: 'Start with {count} playlist',
+    many: 'Start with {count} playlists'
+  }),
+  select: 'Select the playlists that you want to include',
+  selected: 'Selected',
+  notSelected: 'Not selected'
+});
 
 export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
   const sdk = await getSpotify();
@@ -30,6 +43,7 @@ export const clientAction = async ({ request }: ClientActionFunctionArgs) => {
 };
 
 export default function AppIndex() {
+  const t = useStore(messages);
   const { state } = useNavigation()
   const playlists = useLoaderData<typeof clientLoader>();
   const profile = useProfile();
@@ -43,14 +57,14 @@ export default function AppIndex() {
           <input key={id} name="playlist" type="hidden" value={id}/>
         ))}
         <Button
-          text={`Start with ${selected.length} playlist(s)`}
+          text={t.start(selected.length)}
           icon={faPlay}
           loading={state === 'loading'}
           disabled={!selected.length}
           type="submit"
         />
       </Form>
-      Select the playlists that you want to include
+      {t.select}
       <Table
         data={playlists}
         rowKey="id"
@@ -92,7 +106,7 @@ export default function AppIndex() {
                   icon={s ? faSquareCheck : faSquareXmark}
                   className={clsx(styles.icon)}
                 />
-                {s ? 'Selected' : 'Not selected'}
+                {s ? t.selected : t.notSelected}
               </span>
             );
           }

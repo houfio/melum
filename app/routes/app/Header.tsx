@@ -1,5 +1,6 @@
 import { faArrowRightFromBracket, faWaveform } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useStore } from '@nanostores/react';
 import { Form } from '@remix-run/react';
 
 import styles from './Header.module.scss';
@@ -8,8 +9,14 @@ import { Avatar } from '~/components/Avatar';
 import { Button } from '~/components/form/Button';
 import { Container } from '~/components/layout/Container';
 import { useProfile } from '~/hooks/useProfile';
+import { i18n } from '~/stores/i18n';
+
+const messages = i18n('header', {
+  logout: 'Logout'
+});
 
 export function Header() {
+  const t = useStore(messages);
   const profile = useProfile();
 
   return (
@@ -19,7 +26,7 @@ export function Header() {
         Melum
         <div className={styles.spacer}/>
         <Form action="/logout">
-          <Button text="Logout" icon={faArrowRightFromBracket} type="submit"/>
+          <Button text={t.logout} icon={faArrowRightFromBracket} type="submit"/>
         </Form>
         <Avatar profile={profile}/>
       </Container>
