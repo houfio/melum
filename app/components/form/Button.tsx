@@ -1,7 +1,6 @@
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faRotate } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useFetchers } from '@remix-run/react';
 import { clsx } from 'clsx';
 import type { ComponentPropsWithoutRef } from 'react';
 import { useNavigation } from 'react-router';
@@ -19,14 +18,9 @@ type Props = {
 
 export function Button({ text, icon, withText = 'phone', loading, ...props }: Props & ComponentPropsWithoutRef<'button'>) {
   const { state } = useNavigation();
-  const fetchers = useFetchers();
 
-  function isState(s: string) {
-    return state === s || fetchers.some((f) => f.state === s);
-  }
-
-  loading ||= (props.type === 'submit' && isState('submitting'));
-  const disabled = props.disabled || loading || isState('loading');
+  loading ||= (props.type === 'submit' && state === 'submitting');
+  const disabled = props.disabled || loading || state === 'loading';
 
   return (
     <button
