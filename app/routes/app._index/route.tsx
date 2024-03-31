@@ -36,7 +36,7 @@ export default function AppIndex() {
   const [selected, setSelected] = useState<string[]>([]);
 
   return (
-    <>
+    <div className={styles.wrapper}>
       <Form method="post">
         <input name="country" type="hidden" value={profile.country}/>
         {selected.map((id) => (
@@ -48,7 +48,6 @@ export default function AppIndex() {
           loading={state === 'loading'}
           disabled={!selected.length}
           type="submit"
-          className={styles.big}
         />
       </Form>
       Select the playlists that you want to include
@@ -68,7 +67,7 @@ export default function AppIndex() {
               />
               <div className={styles.text}>
                 {item.name}
-                <span className={styles.owner}>
+                <span className={styles.subtle}>
                   {item.owner.display_name}
                 </span>
               </div>
@@ -77,7 +76,11 @@ export default function AppIndex() {
         }, {
           key: 'tracks',
           title: 'Tracks',
-          render: (item) => item.tracks?.total ?? '-'
+          render: (item) => (
+            <span className={styles.subtle}>
+              {item.tracks?.total ?? '-'}
+            </span>
+          )
         }, {
           key: 'id',
           render: (item) => {
@@ -99,6 +102,6 @@ export default function AppIndex() {
           item.id
         ])}
       />
-    </>
+    </div>
   );
 }
