@@ -1,20 +1,18 @@
-import { faRotateLeft } from '@fortawesome/pro-regular-svg-icons';
-import type { ClientActionFunctionArgs, ClientLoaderFunctionArgs } from '@remix-run/react';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import type { ClientLoaderFunctionArgs } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import type { Market, PlaylistedTrack, SpotifyApi, Track } from '@spotify/web-api-ts-sdk';
 import Fuse from 'fuse.js';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '~/components/form/Button';
-import { usePlayer } from '~/hooks/usePlayer';
+import { useAudio } from '~/hooks/useAudio';
 import { getSpotify } from '~/utils/getSpotify';
-import { wait } from '~/utils/wait';
 
 async function getPlaylist(sdk: SpotifyApi, market: Market, playlist: string, offset = 0, tracks: PlaylistedTrack<Track>[] = []) {
   const fetched = await sdk.playlists.getPlaylistItems(
     playlist,
     market,
-    'items.track(id,uri,name,preview_url,is_playable,album(id,images,name),artists(id,name)),next,limit',
+    'items.track(id,uri,name,preview_url,album(id,images,name),artists(id,name)),next,limit',
     undefined,
     offset
   );
@@ -40,35 +38,18 @@ export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
   return data
     .flat()
     .map(({ track }) => track)
-    .filter((track) => track.is_playable)
+    .filter((track) => track.preview_url)
     .reduce<Track[]>((previous, track) => previous.some((t) => t.id === track.id) ? previous : [
       ...previous,
       track
     ], []);
 };
 
-export const clientAction = async ({ request }: ClientActionFunctionArgs) => {
-  const sdk = await getSpotify();
-  const data = await request.formData();
-
-  const deviceId = data.get('deviceId');
-  const uri = data.get('uri');
-
-  if (typeof deviceId !== 'string' || typeof uri !== 'string') {
-    throw new Error();
-  }
-
-  await sdk.player.startResumePlayback(deviceId, undefined, [uri]);
-  await wait(1000);
-  await sdk.player.pausePlayback(deviceId);
-
-  return { ok: true };
-};
-
 export const shouldRevalidate = () => false;
 
 export default function Play() {
   const tracks = useLoaderData<typeof clientLoader>();
+  const { playing, play } = useAudio();
   const [fuse] = useState(() => new Fuse(tracks, {
     keys: [{
       name: 'name',
@@ -78,30 +59,14 @@ export default function Play() {
       weight: 1
     }],
     minMatchCharLength: 3,
-    threshold: .1
+    threshold: .25
   }));
-  const [, , deviceId] = usePlayer();
   const [guessed, setGuessed] = useState<Track[]>([]);
   const [track, setTrack] = useState<Track>();
   const [search, setSearch] = useState('');
-  const fetcher = useFetcher();
+  const [clip, setClip] = useState(0);
 
-  useEffect(() => {
-    if (!deviceId || !track) {
-      return;
-    }
-
-    const data = new FormData();
-
-    data.set('deviceId', deviceId);
-    data.set('uri', track.uri);
-
-    fetcher.submit(data, {
-      method: 'post'
-    });
-  }, [deviceId, track]);
-
-  function nextTrack() {
+  const nextTrack = () => {
     if (track) {
       setGuessed([
         ...guessed,
@@ -115,9 +80,22 @@ export default function Play() {
       return;
     }
 
+    const next = guessable[Math.floor(Math.random() * guessable.length)];
+
     setSearch('');
-    setTrack(guessable[Math.floor(Math.random() * guessable.length)]);
-  }
+    setTrack(next);
+    setClip(0);
+    play(next.preview_url!);
+  };
+
+  const playNext = () => {
+    if (!track) {
+      return;
+    }
+
+    setClip(clip + 1);
+    play(track.preview_url!, clip + 1);
+  };
 
   return track ? (
     <>
@@ -134,12 +112,8 @@ export default function Play() {
         />
       ))}
       <div>
+        <Button text="Play next clip" disabled={playing} onClick={() => playNext()}/>
         <Button text="Skip song" onClick={() => nextTrack()}/>
-        <fetcher.Form method="post">
-          <input name="deviceId" type="hidden" value={deviceId}/>
-          <input name="uri" type="hidden" value={track.uri}/>
-          <Button text="Play again" icon={faRotateLeft} type="submit" disabled={fetcher.state !== 'idle'}/>
-        </fetcher.Form>
       </div>
     </>
   ) : (
