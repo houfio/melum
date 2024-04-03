@@ -14,5 +14,11 @@ export default {
     select: 'Selecteer de afspeellijsten waar je mee wil spelen',
     selected: 'Geselecteerd',
     notSelected: 'Niet geselecteerd'
+  },
+  play: {
+    start: 'Eerste nummer starten',
+    search: 'Zoeken...',
+    next: 'Volgende seconde afspelen',
+    skip: 'Nummer overslaan'
   }
 };
