@@ -7,8 +7,6 @@ import './root.scss';
 import { $locale } from '~/stores/i18n';
 import { $settings } from '~/stores/settings';
 
-export const config = { runtime: 'edge' };
-
 export const meta: MetaFunction = () => [
   { title: 'Melum' }
 ];
