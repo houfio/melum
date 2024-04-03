@@ -3,7 +3,6 @@ import { Meta, type MetaFunction, Outlet, Scripts, ScrollRestoration } from '@re
 import type { PropsWithChildren } from 'react';
 
 import './root.scss';
-import { usePlaybackSDK } from './hooks/usePlaybackSDK';
 
 import { $locale } from '~/stores/i18n';
 import { $settings } from '~/stores/settings';
@@ -36,9 +35,7 @@ export function Layout({ children }: PropsWithChildren) {
 
 export default function App() {
   return (
-    <usePlaybackSDK.Provider>
-      <Outlet/>
-    </usePlaybackSDK.Provider>
+    <Outlet/>
   );
 }
 

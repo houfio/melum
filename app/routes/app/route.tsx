@@ -1,11 +1,11 @@
-import { Outlet, redirect, useLoaderData } from '@remix-run/react';
+import { Outlet, redirect } from '@remix-run/react';
+import { useRef } from 'react';
 
 import styles from './route.module.scss';
 
 import { Container } from '~/components/layout/Container';
-import { usePlayer } from '~/hooks/usePlayer';
+import { useAudio } from '~/hooks/useAudio';
 import { Header } from '~/routes/app/Header';
-import { Player } from '~/routes/app/Player';
 import { getSpotify } from '~/utils/getSpotify';
 
 export const clientLoader = async () => {
@@ -17,23 +17,24 @@ export const clientLoader = async () => {
   }
 
   return {
-    token: token.access_token,
     profile: await sdk.currentUser.profile()
   };
 };
 
+export const shouldRevalidate = () => false;
+
 export default function App() {
-  const { token } = useLoaderData<typeof clientLoader>();
+  const ref = useRef<HTMLAudioElement>(null);
 
   return (
-    <usePlayer.Provider token={token}>
+    <useAudio.Provider audioRef={ref}>
+      <audio ref={ref}/>
       <Header/>
       <main className={styles.main}>
         <Container>
           <Outlet/>
         </Container>
       </main>
-      <Player/>
-    </usePlayer.Provider>
+    </useAudio.Provider>
   );
 }
