@@ -1,0 +1,38 @@
+.track {
+  display: flex;
+  gap: .5rem;
+  padding: .5rem;
+  background-color: var(--surface);
+  border: none;
+  border-radius: .5rem;
+  text-align: start;
+  appearance: none;
+
+  &:hover {
+    background-color: var(--surface-hover);
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: var(--surface-click);
+  }
+}
+
+.image {
+  width: 4rem;
+  height: 4rem;
+  background: var(--background) center no-repeat;
+  background-size: cover;
+  border-radius: .25rem;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: stretch;
+}
+
+.subtle {
+  color: var(--on-surface-subtle);
+}

@@ -1,12 +1,25 @@
+import { faForward, faForwardStep } from '@fortawesome/pro-regular-svg-icons';
+import { useStore } from '@nanostores/react';
 import type { ClientLoaderFunctionArgs } from '@remix-run/react';
 import { useLoaderData } from '@remix-run/react';
 import type { Market, PlaylistedTrack, SpotifyApi, Track } from '@spotify/web-api-ts-sdk';
 import Fuse from 'fuse.js';
 import { useState } from 'react';
 
+import styles from './route.module.scss';
+
+import { TrackEntry } from '~/components/TrackEntry';
 import { Button } from '~/components/form/Button';
 import { useAudio } from '~/hooks/useAudio';
+import { i18n } from '~/stores/i18n';
 import { getSpotify } from '~/utils/getSpotify';
+
+const messages = i18n('play', {
+  start: 'Start first track',
+  search: 'Search...',
+  next: 'Play next second',
+  skip: 'Skip song'
+});
 
 async function getPlaylist(sdk: SpotifyApi, market: Market, playlist: string, offset = 0, tracks: PlaylistedTrack<Track>[] = []) {
   const fetched = await sdk.playlists.getPlaylistItems(
@@ -48,12 +61,13 @@ export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
 export const shouldRevalidate = () => false;
 
 export default function Play() {
+  const t = useStore(messages);
   const tracks = useLoaderData<typeof clientLoader>();
   const { playing, play } = useAudio();
   const [fuse] = useState(() => new Fuse(tracks, {
     keys: [{
       name: 'name',
-      weight: 2
+      weight: 5
     }, {
       name: 'artists.name',
       weight: 1
@@ -98,12 +112,17 @@ export default function Play() {
   };
 
   return track ? (
-    <>
-      <input value={search} onChange={(e) => setSearch(e.target.value)}/>
+    <div className={styles.content}>
+      <input
+        value={search}
+        placeholder={t.search}
+        className={styles.input}
+        onChange={(e) => setSearch(e.target.value)}
+      />
       {fuse.search(search).map(({ item }) => (
-        <Button
+        <TrackEntry
           key={item.id}
-          text={`${item.artists.map((a) => a.name).join(', ')} - ${item.name}`}
+          track={item}
           onClick={() => {
             if (track.id === item.id) {
               nextTrack();
@@ -111,14 +130,14 @@ export default function Play() {
           }}
         />
       ))}
-      <div>
-        <Button text="Play next clip" disabled={playing} onClick={() => playNext()}/>
-        <Button text="Skip song" onClick={() => nextTrack()}/>
+      <div className={styles.actions}>
+        <Button text={t.next} icon={faForwardStep} disabled={playing} onClick={() => playNext()}/>
+        <Button text={t.skip} icon={faForward} onClick={() => nextTrack()}/>
       </div>
-    </>
+    </div>
   ) : (
     <Button
-      text="Start first track"
+      text={t.start}
       onClick={() => nextTrack()}
     />
   );
