@@ -88,7 +88,7 @@ export default function Play() {
       ]);
     }
 
-    const guessable = tracks.filter((track) => !guessed.includes(track));
+    const guessable = tracks.filter((t) => !guessed.includes(t) && track !== t);
 
     if (guessable.length <= 1) {
       return;
