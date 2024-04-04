@@ -4,7 +4,10 @@ export default {
     login: 'Inloggen met Spotify'
   },
   header: {
-    logout: 'Uitloggen'
+    logout: 'Uitloggen',
+    leave: 'Spel verlaten',
+    resume: 'Spel hervatten',
+    stop: 'Spel stoppen'
   },
   playlists: {
     start: {

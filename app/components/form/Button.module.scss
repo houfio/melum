@@ -8,6 +8,7 @@
   background-color: var(--accent);
   border: none;
   border-radius: .5rem;
+  text-decoration: none;
   appearance: none;
 
   &:hover {
@@ -19,7 +20,7 @@
     background-color: var(--accent-click);
   }
 
-  &:disabled {
+  &.disabled {
     pointer-events: none;
     opacity: .5;
   }

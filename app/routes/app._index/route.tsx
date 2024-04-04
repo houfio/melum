@@ -2,8 +2,8 @@ import { faPlay, faSquareCheck, faSquareXmark } from '@fortawesome/pro-regular-s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { count } from '@nanostores/i18n';
 import { useStore } from '@nanostores/react';
-import type { ClientActionFunctionArgs, ClientLoaderFunctionArgs} from '@remix-run/react';
-import { redirect , Form, useLoaderData } from '@remix-run/react';
+import type { ClientActionFunctionArgs, ClientLoaderFunctionArgs } from '@remix-run/react';
+import { Form, redirect, useLoaderData } from '@remix-run/react';
 import { clsx } from 'clsx';
 import { useState } from 'react';
 import { useNavigation } from 'react-router';
@@ -46,7 +46,7 @@ export const clientAction = async ({ request }: ClientActionFunctionArgs) => {
 
 export default function AppIndex() {
   const t = useStore(messages);
-  const { state } = useNavigation()
+  const { state } = useNavigation();
   const playlists = useLoaderData<typeof clientLoader>();
   const [selected, setSelected] = useState<string[]>([]);
 
