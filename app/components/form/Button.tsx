@@ -11,12 +11,13 @@ import type { Breakpoint } from '~/types';
 
 type Props = {
   text: string,
+  chip?: string,
   icon?: IconProp,
   withText?: false | Breakpoint,
   loading?: boolean
 };
 
-export function Button({ text, icon, withText = 'phone', loading, ...props }: Props & ComponentPropsWithoutRef<'button'>) {
+export function Button({ text, chip, icon, withText = 'phone', loading, ...props }: Props & ComponentPropsWithoutRef<'button'>) {
   const { state } = useNavigation();
 
   loading ||= (props.type === 'submit' && state === 'submitting');
@@ -40,6 +41,11 @@ export function Button({ text, icon, withText = 'phone', loading, ...props }: Pr
         <span className={styles.text}>
           {text}
         </span>
+        {chip && (
+          <span className={styles.chip}>
+            {chip}
+          </span>
+        )}
       </div>
       {loading && (
         <FontAwesomeIcon icon={faRotate} spin={true} className={styles.spinner}/>

@@ -8,13 +8,15 @@
   text-align: start;
   appearance: none;
 
-  &:hover {
-    background-color: var(--surface-hover);
-    cursor: pointer;
-  }
+  &:is(button) {
+    &:hover {
+      background-color: var(--surface-hover);
+      cursor: pointer;
+    }
 
-  &:active {
-    background-color: var(--surface-click);
+    &:active {
+      background-color: var(--surface-click);
+    }
   }
 }
 

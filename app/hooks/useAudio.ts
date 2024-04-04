@@ -13,13 +13,13 @@ export const useAudio = createProvidableHook(({ audioRef }: Props) => {
   const [playing, setPlaying] = useState(false);
   const volume = useEventListener(audioRef, 'volumechange', 0, (audio) => audio.volume);
 
-  const play = (url: string, start = 0, duration = 1) => {
+  const play = (url: string, offset = 0, duration = 1) => {
     if (!audioRef.current) {
       return;
     }
 
     audioRef.current.src = url;
-    audioRef.current.currentTime = start;
+    audioRef.current.currentTime = offset * duration;
     audioRef.current.play()
       .then(() => {
         setPlaying(true);

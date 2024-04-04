@@ -12,7 +12,7 @@ import styles from './route.module.scss';
 
 import { Table } from '~/components/Table';
 import { Button } from '~/components/form/Button';
-import { useProfile } from '~/hooks/useProfile';
+import { startGame } from '~/stores/game';
 import { i18n } from '~/stores/i18n';
 import { getImage } from '~/utils/getImage';
 import { getSpotify } from '~/utils/getSpotify';
@@ -37,22 +37,22 @@ export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
 
 export const clientAction = async ({ request }: ClientActionFunctionArgs) => {
   const data = await request.formData();
-  const params = new URLSearchParams(data as unknown as URLSearchParams);
+  const playlists = data.getAll('playlist');
 
-  return redirect(`/app/play?${params.toString()}`)
+  startGame(playlists as string[]);
+
+  return redirect('/app/play');
 };
 
 export default function AppIndex() {
   const t = useStore(messages);
   const { state } = useNavigation()
   const playlists = useLoaderData<typeof clientLoader>();
-  const profile = useProfile();
   const [selected, setSelected] = useState<string[]>([]);
 
   return (
     <div className={styles.wrapper}>
       <Form method="post">
-        <input name="country" type="hidden" value={profile.country}/>
         {selected.map((id) => (
           <input key={id} name="playlist" type="hidden" value={id}/>
         ))}
