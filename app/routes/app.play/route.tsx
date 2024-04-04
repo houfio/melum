@@ -83,7 +83,7 @@ export default function Play() {
     threshold: .25
   }));
   const currentGame = useStore($currentGame);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(100);
   const [search, setSearch] = useState('');
   const [clip, setClip] = useState(0);
 
@@ -131,7 +131,7 @@ export default function Play() {
             className={styles.input}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {fuse.search(search).map(({ item }) => (
+          {fuse.search(search).slice(0, 3).map(({ item }) => (
             <TrackEntry
               key={item.id}
               track={item}
