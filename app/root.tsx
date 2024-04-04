@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { Meta, type MetaFunction, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { Links, Meta, type MetaFunction, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 import type { PropsWithChildren } from 'react';
 
 import './root.scss';
@@ -21,6 +21,7 @@ export function Layout({ children }: PropsWithChildren) {
         <meta charSet="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <Meta/>
+        <Links/>
       </head>
       <body>
         {children}
