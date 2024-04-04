@@ -1,8 +1,8 @@
 import { faForward, faForwardStep } from '@fortawesome/pro-regular-svg-icons';
+import { params } from '@nanostores/i18n';
 import { useStore } from '@nanostores/react';
-import type { ClientLoaderFunctionArgs } from '@remix-run/react';
-import { useLoaderData } from '@remix-run/react';
-import type { Market, PlaylistedTrack, SpotifyApi, Track } from '@spotify/web-api-ts-sdk';
+import { redirect, useLoaderData } from '@remix-run/react';
+import type { PlaylistedTrack, SpotifyApi, Track } from '@spotify/web-api-ts-sdk';
 import Fuse from 'fuse.js';
 import { useState } from 'react';
 
@@ -11,6 +11,7 @@ import styles from './route.module.scss';
 import { TrackEntry } from '~/components/TrackEntry';
 import { Button } from '~/components/form/Button';
 import { useAudio } from '~/hooks/useAudio';
+import { $currentGame, setGuessed, setNextTrack, setSkipped } from '~/stores/game';
 import { i18n } from '~/stores/i18n';
 import { getSpotify } from '~/utils/getSpotify';
 
@@ -18,13 +19,16 @@ const messages = i18n('play', {
   start: 'Start first track',
   search: 'Search...',
   next: 'Play next second',
-  skip: 'Skip song'
+  skip: 'Skip song',
+  guessed: 'You got it!',
+  skipped: 'Too bad',
+  score: params('Score: {score}')
 });
 
-async function getPlaylist(sdk: SpotifyApi, market: Market, playlist: string, offset = 0, tracks: PlaylistedTrack<Track>[] = []) {
+async function getPlaylist(sdk: SpotifyApi, playlist: string, offset = 0, tracks: PlaylistedTrack<Track>[] = []) {
   const fetched = await sdk.playlists.getPlaylistItems(
     playlist,
-    market,
+    undefined,
     'items.track(id,uri,name,preview_url,album(id,images,name),artists(id,name)),next,limit',
     undefined,
     offset
@@ -38,15 +42,18 @@ async function getPlaylist(sdk: SpotifyApi, market: Market, playlist: string, of
     return result;
   }
 
-  return getPlaylist(sdk, market, playlist, offset + fetched.limit, result);
+  return getPlaylist(sdk, playlist, offset + fetched.limit, result);
 }
 
-export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
+export const clientLoader = async () => {
   const sdk = await getSpotify();
-  const url = new URL(request.url);
-  const country = url.searchParams.get('country');
-  const playlists = url.searchParams.getAll('playlist');
-  const data = await Promise.all(playlists.map((playlist) => getPlaylist(sdk, country as Market, playlist)));
+  const currentGame = $currentGame.get();
+
+  if (!currentGame) {
+    throw redirect('/app');
+  }
+
+  const data = await Promise.all(currentGame.playlists.map((playlist) => getPlaylist(sdk, playlist)));
 
   return data
     .flat()
@@ -75,70 +82,91 @@ export default function Play() {
     minMatchCharLength: 3,
     threshold: .25
   }));
-  const [guessed, setGuessed] = useState<Track[]>([]);
-  const [track, setTrack] = useState<Track>();
+  const currentGame = useStore($currentGame);
+  const [score, setScore] = useState(0);
   const [search, setSearch] = useState('');
   const [clip, setClip] = useState(0);
 
-  const nextTrack = () => {
-    if (track) {
-      setGuessed([
-        ...guessed,
-        track
-      ]);
-    }
+  if (!currentGame) {
+    return null;
+  }
 
-    const guessable = tracks.filter((t) => !guessed.includes(t) && track !== t);
+  const track = tracks.find((t) => t.id === currentGame.track);
+  const guessed = currentGame.guessed.includes(track?.id ?? '');
+  const skipped = currentGame.skipped.includes(track?.id ?? '');
 
-    if (guessable.length <= 1) {
-      return;
-    }
-
-    const next = guessable[Math.floor(Math.random() * guessable.length)];
-
+  const nextTrack = () => setNextTrack(tracks, (t) => {
+    setScore(100);
     setSearch('');
-    setTrack(next);
     setClip(0);
-    play(next.preview_url!);
-  };
+    play(t.preview_url!);
+  });
 
-  const playNext = () => {
+  const playClip = () => {
     if (!track) {
       return;
     }
 
+    setScore(score - 10);
     setClip(clip + 1);
     play(track.preview_url!, clip + 1);
   };
 
-  return track ? (
+  return (
     <div className={styles.content}>
-      <input
-        value={search}
-        placeholder={t.search}
-        className={styles.input}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      {fuse.search(search).map(({ item }) => (
-        <TrackEntry
-          key={item.id}
-          track={item}
-          onClick={() => {
-            if (track.id === item.id) {
-              nextTrack();
-            }
-          }}
-        />
-      ))}
-      <div className={styles.actions}>
-        <Button text={t.next} icon={faForwardStep} disabled={playing} onClick={() => playNext()}/>
-        <Button text={t.skip} icon={faForward} onClick={() => nextTrack()}/>
-      </div>
+      {track ? guessed || skipped ? (
+        <>
+          {guessed ? t.guessed : t.skipped}
+          <TrackEntry track={track}/>
+          {t.score({ score: currentGame.score })}
+          <div>
+            <Button text="Next" onClick={() => nextTrack()}/>
+          </div>
+        </>
+      ) : (
+        <>
+          <input
+            value={search}
+            placeholder={t.search}
+            className={styles.input}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {fuse.search(search).map(({ item }) => (
+            <TrackEntry
+              key={item.id}
+              track={item}
+              onClick={() => {
+                if (track.id === item.id) {
+                  setGuessed(score);
+                }
+              }}
+            />
+          ))}
+          <div className={styles.actions}>
+            <Button
+              text={t.next}
+              chip="-10"
+              icon={faForwardStep}
+              disabled={playing || !score}
+              onClick={() => playClip()}
+            />
+            <Button
+              text={t.skip}
+              chip={`-${score}`}
+              icon={faForward}
+              onClick={() => setSkipped()}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          rules
+          <Button
+            text={t.start}
+            onClick={() => nextTrack()}
+          />
+        </>
+      )}
     </div>
-  ) : (
-    <Button
-      text={t.start}
-      onClick={() => nextTrack()}
-    />
   );
 }

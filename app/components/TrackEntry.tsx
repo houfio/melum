@@ -11,9 +11,10 @@ type Props = {
 
 export function TrackEntry({ track, onClick }: Props) {
   const image = getImage(track.album.images, 'smallest');
+  const Component = onClick ? 'button' : 'div';
 
   return (
-    <button
+    <Component
       key={track.id}
       className={styles.track}
       onClick={onClick}
@@ -33,6 +34,6 @@ export function TrackEntry({ track, onClick }: Props) {
           {track.album.name}
         </span>
       </div>
-    </button>
+    </Component>
   );
 }
