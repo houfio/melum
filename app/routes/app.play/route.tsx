@@ -67,6 +67,8 @@ export const clientLoader = async () => {
 
 export const shouldRevalidate = () => false;
 
+export const handle = { game: true };
+
 export default function Play() {
   const t = useStore(messages);
   const tracks = useLoaderData<typeof clientLoader>();

@@ -2,7 +2,7 @@ import { faRotate } from '@fortawesome/pro-regular-svg-icons';
 import { useFetcher } from '@remix-run/react';
 import type { Page } from '@spotify/web-api-ts-sdk';
 import { clsx } from 'clsx';
-import type { ReactNode} from 'react';
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 
 import styles from './Table.module.scss';

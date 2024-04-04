@@ -1,4 +1,4 @@
-import type { RefObject} from 'react';
+import type { RefObject } from 'react';
 import { useSyncExternalStore } from 'react';
 
 export function useEventListener<T extends HTMLElement, V>(ref: RefObject<T | null>, event: keyof HTMLElementEventMap, initialValue: V, getSnapshot: (element: T) => V) {

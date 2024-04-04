@@ -1,4 +1,4 @@
-import type { PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
 export function createProvidableHook<T, P>(fn: (props: P) => T) {

@@ -23,6 +23,10 @@ export function startGame(playlists: string[]) {
   });
 }
 
+export function stopGame() {
+  $currentGame.set(undefined);
+}
+
 export function setGuessed(score: number) {
   const current = $currentGame.get();
 

@@ -25,5 +25,5 @@ export function Volume() {
         onChange={(e) => setVolume(e.target.valueAsNumber)}
       />
     </div>
-  )
+  );
 }
