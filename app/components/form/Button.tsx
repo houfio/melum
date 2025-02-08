@@ -4,18 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { clsx } from 'clsx';
 import type { ComponentPropsWithoutRef, ElementType } from 'react';
 import { useNavigation } from 'react-router';
-
+import type { Breakpoint } from '~/types';
 import styles from './Button.module.scss';
 
-import type { Breakpoint } from '~/types';
-
 type Props<T> = {
-  as?: T,
-  text: string,
-  chip?: string,
-  icon?: IconProp,
-  withText?: false | Breakpoint,
-  loading?: boolean
+  as?: T;
+  text: string;
+  chip?: string;
+  icon?: IconProp;
+  withText?: false | Breakpoint;
+  loading?: boolean;
 };
 
 export function Button<T extends ElementType = 'button'>({
@@ -29,7 +27,7 @@ export function Button<T extends ElementType = 'button'>({
 }: Props<T> & ComponentPropsWithoutRef<T>) {
   const { state } = useNavigation();
 
-  loading ||= (props.type === 'submit' && state === 'submitting');
+  loading ||= props.type === 'submit' && state === 'submitting';
   const disabled = props.disabled || loading || state === 'loading';
   const Component = as ?? 'button';
 
@@ -46,21 +44,11 @@ export function Button<T extends ElementType = 'button'>({
       disabled={disabled}
     >
       <div className={clsx(loading && styles.loading)}>
-        {icon && (
-          <FontAwesomeIcon icon={icon} className={styles.icon}/>
-        )}
-        <span className={styles.text}>
-          {text}
-        </span>
-        {chip && (
-          <span className={styles.chip}>
-            {chip}
-          </span>
-        )}
+        {icon && <FontAwesomeIcon icon={icon} className={styles.icon} />}
+        <span className={styles.text}>{text}</span>
+        {chip && <span className={styles.chip}>{chip}</span>}
       </div>
-      {loading && (
-        <FontAwesomeIcon icon={faRotate} spin={true} className={styles.spinner}/>
-      )}
+      {loading && <FontAwesomeIcon icon={faRotate} spin={true} className={styles.spinner} />}
     </Component>
   );
 }

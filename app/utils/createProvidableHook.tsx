@@ -1,8 +1,7 @@
-import type { PropsWithChildren } from 'react';
-import { createContext, useContext } from 'react';
+import { type PropsWithChildren, createContext, useContext } from 'react';
 
 export function createProvidableHook<T, P>(fn: (props: P) => T) {
-  const context = createContext<T>(undefined!);
+  const context = createContext<T | undefined>(undefined);
   const useHook = () => {
     const value = useContext(context);
 
@@ -14,9 +13,7 @@ export function createProvidableHook<T, P>(fn: (props: P) => T) {
   };
 
   useHook.Provider = (props: PropsWithChildren<P>) => (
-    <context.Provider value={fn(props)}>
-      {props.children}
-    </context.Provider>
+    <context.Provider value={fn(props)}>{props.children}</context.Provider>
   );
 
   return useHook;

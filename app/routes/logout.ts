@@ -1,5 +1,4 @@
-import { redirect } from '@remix-run/react';
-
+import { redirect } from 'react-router';
 import { getSpotify } from '~/utils/getSpotify';
 
 export const clientLoader = async () => {

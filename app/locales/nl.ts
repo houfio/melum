@@ -1,6 +1,7 @@
 export default {
   home: {
-    description: 'Raad welk nummer er wordt gespeeld nadat je er maar een seconde van hebt gehoord! Gebruikt de Spotify API om afspeellijsten op te halen en muziek af te spelen.',
+    description:
+      'Raad welk nummer er wordt gespeeld nadat je er maar een seconde van hebt gehoord! Gebruikt de Spotify API om afspeellijsten op te halen en muziek af te spelen.',
     login: 'Inloggen met Spotify'
   },
   header: {

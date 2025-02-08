@@ -1,11 +1,10 @@
 import { browser, createI18n, localeFrom } from '@nanostores/i18n';
 import { computed } from 'nanostores';
-
-import { $settings } from './settings';
+import { $settings } from '~/stores/settings';
 
 export const available = ['en', 'nl'] as const;
 export const $locale = localeFrom(
-  computed($settings, (settings) => settings.language !== 'auto' ? settings.language : undefined),
+  computed($settings, (settings) => (settings.language !== 'auto' ? settings.language : undefined)),
   browser({ available })
 );
 

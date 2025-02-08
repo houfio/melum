@@ -2,11 +2,11 @@ import { persistentAtom } from '@nanostores/persistent';
 import type { Track } from '@spotify/web-api-ts-sdk';
 
 type Game = {
-  playlists: string[],
-  guessed: string[],
-  skipped: string[],
-  track?: string,
-  score: number
+  playlists: string[];
+  guessed: string[];
+  skipped: string[];
+  track?: string;
+  score: number;
 };
 
 export const $currentGame = persistentAtom<Game | undefined>('game', undefined, {
@@ -36,10 +36,7 @@ export function setGuessed(score: number) {
 
   $currentGame.set({
     ...current,
-    guessed: [
-      ...current.guessed,
-      current.track
-    ],
+    guessed: [...current.guessed, current.track],
     score: current.score + score
   });
 }
@@ -53,10 +50,7 @@ export function setSkipped() {
 
   $currentGame.set({
     ...current,
-    skipped: [
-      ...current.skipped,
-      current.track
-    ]
+    skipped: [...current.skipped, current.track]
   });
 }
 
