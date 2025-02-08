@@ -1,5 +1,5 @@
-import { redirect } from '@remix-run/react';
 import { Scopes, SpotifyApi } from '@spotify/web-api-ts-sdk';
+import { redirect } from 'react-router';
 
 export async function getSpotify(require = true) {
   const sdk = SpotifyApi.withUserAuthorization(
@@ -8,7 +8,7 @@ export async function getSpotify(require = true) {
     [...Scopes.playlistRead, ...Scopes.userPlayback]
   );
 
-  if (require && !await sdk.getAccessToken()) {
+  if (require && !(await sdk.getAccessToken())) {
     throw redirect('/');
   }
 

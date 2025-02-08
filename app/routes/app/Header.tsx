@@ -7,10 +7,7 @@ import {
 } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStore } from '@nanostores/react';
-import { Form, Link, useMatches } from '@remix-run/react';
-
-import styles from './Header.module.scss';
-
+import { Form, Link, useMatches } from 'react-router';
 import { Avatar } from '~/components/Avatar';
 import { Button } from '~/components/form/Button';
 import { Volume } from '~/components/form/Volume';
@@ -18,6 +15,7 @@ import { Container } from '~/components/layout/Container';
 import { useProfile } from '~/hooks/useProfile';
 import { $currentGame, stopGame } from '~/stores/game';
 import { i18n } from '~/stores/i18n';
+import styles from './Header.module.scss';
 
 const messages = i18n('header', {
   logout: 'Logout',
@@ -32,14 +30,14 @@ export function Header() {
   const matches = useMatches();
   const currentGame = useStore($currentGame);
 
-  const inGame = matches.some((m) => typeof m.handle === 'object' && (m.handle as any)?.game);
+  const inGame = matches.some((m) => m.handle && typeof m.handle === 'object' && 'game' in m.handle && m.handle.game);
 
   return (
     <header className={styles.header}>
       <Container className={styles.container}>
-        <FontAwesomeIcon icon={faWaveform}/>
+        <FontAwesomeIcon icon={faWaveform} />
         Melum
-        <div className={styles.spacer}/>
+        <div className={styles.spacer} />
         {currentGame && (
           <>
             <Button
@@ -48,21 +46,14 @@ export function Header() {
               text={inGame ? t.leave : t.resume}
               icon={inGame ? faArrowLeftFromArc : faArrowRightToArc}
             />
-            <Button
-              as={Link}
-              to="/app"
-              text={t.stop}
-              icon={faXmark}
-              withText={false}
-              onClick={() => stopGame()}
-            />
-            <Volume/>
+            <Button as={Link} to="/app" text={t.stop} icon={faXmark} withText={false} onClick={() => stopGame()} />
+            <Volume />
           </>
         )}
         <Form action="/logout">
-          <Button text={t.logout} icon={faArrowRightFromBracket} type="submit"/>
+          <Button text={t.logout} icon={faArrowRightFromBracket} type="submit" />
         </Form>
-        <Avatar profile={profile}/>
+        <Avatar profile={profile} />
       </Container>
     </header>
   );

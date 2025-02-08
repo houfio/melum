@@ -1,12 +1,10 @@
 import type { Track } from '@spotify/web-api-ts-sdk';
-
+import { getImage } from '~/utils/getImage';
 import styles from './TrackEntry.module.scss';
 
-import { getImage } from '~/utils/getImage';
-
 type Props = {
-  track: Track,
-  onClick?: () => void
+  track: Track;
+  onClick?: () => void;
 };
 
 export function TrackEntry({ track, onClick }: Props) {
@@ -14,25 +12,12 @@ export function TrackEntry({ track, onClick }: Props) {
   const Component = onClick ? 'button' : 'div';
 
   return (
-    <Component
-      key={track.id}
-      className={styles.track}
-      onClick={onClick}
-    >
-      <div
-        style={{ backgroundImage: `url(${image?.url})` }}
-        className={styles.image}
-      />
+    <Component key={track.id} className={styles.track} onClick={onClick}>
+      <div style={{ backgroundImage: `url(${image?.url})` }} className={styles.image} />
       <div className={styles.info}>
-        <span>
-          {track.name}
-        </span>
-        <span>
-          {track.artists.map((a) => a.name).join(', ')}
-        </span>
-        <span className={styles.subtle}>
-          {track.album.name}
-        </span>
+        <span>{track.name}</span>
+        <span>{track.artists.map((a) => a.name).join(', ')}</span>
+        <span className={styles.subtle}>{track.album.name}</span>
       </div>
     </Component>
   );

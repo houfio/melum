@@ -1,12 +1,10 @@
-import type { RefObject } from 'react';
-import { useState } from 'react';
-
+import { type RefObject, useState } from 'react';
 import { useEventListener } from '~/hooks/useEventListener';
 import { createProvidableHook } from '~/utils/createProvidableHook';
 import { wait } from '~/utils/wait';
 
 type Props = {
-  audioRef: RefObject<HTMLAudioElement | null>
+  audioRef: RefObject<HTMLAudioElement | null>;
 };
 
 export const useAudio = createProvidableHook(({ audioRef }: Props) => {
@@ -20,7 +18,8 @@ export const useAudio = createProvidableHook(({ audioRef }: Props) => {
 
     audioRef.current.src = url;
     audioRef.current.currentTime = offset * duration;
-    audioRef.current.play()
+    audioRef.current
+      .play()
       .then(() => {
         setPlaying(true);
 
@@ -29,7 +28,9 @@ export const useAudio = createProvidableHook(({ audioRef }: Props) => {
       .then(() => {
         setPlaying(false);
 
-        audioRef.current!.src = '';
+        if (audioRef.current) {
+          audioRef.current.src = '';
+        }
       });
   };
 

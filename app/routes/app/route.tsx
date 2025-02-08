@@ -1,12 +1,10 @@
-import { Outlet, redirect } from '@remix-run/react';
 import { useRef } from 'react';
-
-import styles from './route.module.scss';
-
+import { Outlet, redirect } from 'react-router';
 import { Container } from '~/components/layout/Container';
 import { useAudio } from '~/hooks/useAudio';
 import { Header } from '~/routes/app/Header';
 import { getSpotify } from '~/utils/getSpotify';
+import styles from './route.module.scss';
 
 export const clientLoader = async () => {
   const sdk = await getSpotify();
@@ -28,11 +26,12 @@ export default function App() {
 
   return (
     <useAudio.Provider audioRef={ref}>
-      <audio ref={ref}/>
-      <Header/>
+      {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
+      <audio ref={ref} />
+      <Header />
       <main className={styles.main}>
         <Container>
-          <Outlet/>
+          <Outlet />
         </Container>
       </main>
     </useAudio.Provider>
