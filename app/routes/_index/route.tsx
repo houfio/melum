@@ -2,11 +2,10 @@ import { faGithub, faSpotify } from '@fortawesome/free-brands-svg-icons';
 import { faWaveform } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useStore } from '@nanostores/react';
-import { Form, redirect } from 'react-router';
+import { Form, type LoaderFunctionArgs, redirect } from 'react-router';
 import { Button } from '~/components/form/Button';
 import { i18n } from '~/stores/i18n';
 import { getSpotify } from '~/utils/getSpotify';
-import type { Route } from './+types/route';
 import styles from './route.module.scss';
 
 const messages = i18n('home', {
@@ -15,7 +14,7 @@ const messages = i18n('home', {
   login: 'Login with Spotify'
 });
 
-export const clientLoader = async ({ request }: Route.ClientLoaderArgs) => {
+export const clientLoader = async ({ request }: LoaderFunctionArgs) => {
   const sdk = await getSpotify(false);
   const url = new URL(request.url);
 

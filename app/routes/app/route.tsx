@@ -2,12 +2,12 @@ import { useRef } from 'react';
 import { Outlet, redirect } from 'react-router';
 import { Container } from '~/components/layout/Container';
 import { useAudio } from '~/hooks/useAudio';
+import type { Context } from '~/main';
 import { Header } from '~/routes/app/Header';
-import { getSpotify } from '~/utils/getSpotify';
+import { middleware } from '~/utils/middleware';
 import styles from './route.module.scss';
 
-export const clientLoader = async () => {
-  const sdk = await getSpotify();
+export const clientLoader = async (_: unknown, { sdk }: Context) => {
   const token = await sdk.getAccessToken();
 
   if (!token) {
@@ -20,6 +20,8 @@ export const clientLoader = async () => {
 };
 
 export const shouldRevalidate = () => false;
+
+export const handle = { middleware };
 
 export default function App() {
   const ref = useRef<HTMLAudioElement>(null);

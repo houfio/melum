@@ -4,14 +4,13 @@ import { useStore } from '@nanostores/react';
 import type { PlaylistedTrack, SpotifyApi, Track } from '@spotify/web-api-ts-sdk';
 import Fuse from 'fuse.js';
 import { useState } from 'react';
-import { redirect } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 import { TrackEntry } from '~/components/TrackEntry';
 import { Button } from '~/components/form/Button';
 import { useAudio } from '~/hooks/useAudio';
+import type { Context } from '~/main';
 import { $currentGame, setGuessed, setNextTrack, setSkipped } from '~/stores/game';
 import { i18n } from '~/stores/i18n';
-import { getSpotify } from '~/utils/getSpotify';
-import type { Route } from './+types/route';
 import styles from './route.module.scss';
 
 const messages = i18n('play', {
@@ -41,8 +40,7 @@ async function getPlaylist(sdk: SpotifyApi, playlist: string, offset = 0, tracks
   return getPlaylist(sdk, playlist, offset + fetched.limit, result);
 }
 
-export const clientLoader = async () => {
-  const sdk = await getSpotify();
+export const clientLoader = async (_: unknown, { sdk }: Context) => {
   const currentGame = $currentGame.get();
 
   if (!currentGame) {
@@ -68,8 +66,8 @@ export const shouldRevalidate = () => false;
 
 export const handle = { game: true };
 
-export default function Play({ loaderData }: Route.ComponentProps) {
-  console.log(loaderData);
+export default function Play() {
+  const loaderData = useLoaderData<typeof clientLoader>();
   const t = useStore(messages);
   const { playing, play } = useAudio();
   const [fuse] = useState(

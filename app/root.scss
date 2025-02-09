@@ -16,14 +16,17 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-  min-height: 100dvh;
   color: var(--on-background);
   background-color: var(--background);
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  min-height: 100dvh;
 }
 
 img {

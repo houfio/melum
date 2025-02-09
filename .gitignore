@@ -1,8 +1,6 @@
 node_modules
 
 /.cache
-/.vercel
 /.idea
-/.react-router
 /build
 .env
