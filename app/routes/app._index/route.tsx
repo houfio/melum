@@ -4,14 +4,20 @@ import { count } from '@nanostores/i18n';
 import { useStore } from '@nanostores/react';
 import { clsx } from 'clsx';
 import { useState } from 'react';
-import { Form, redirect, useNavigation } from 'react-router';
+import {
+  type ActionFunctionArgs,
+  Form,
+  type LoaderFunctionArgs,
+  redirect,
+  useLoaderData,
+  useNavigation
+} from 'react-router';
 import { Table } from '~/components/Table';
 import { Button } from '~/components/form/Button';
+import type { Context } from '~/main';
 import { startGame } from '~/stores/game';
 import { i18n } from '~/stores/i18n';
 import { getImage } from '~/utils/getImage';
-import { getSpotify } from '~/utils/getSpotify';
-import type { Route } from './+types/route';
 import styles from './route.module.scss';
 
 const messages = i18n('playlists', {
@@ -24,15 +30,14 @@ const messages = i18n('playlists', {
   notSelected: 'Not selected'
 });
 
-export const clientLoader = async ({ request }: Route.ClientLoaderArgs) => {
-  const sdk = await getSpotify();
+export const clientLoader = async ({ request }: LoaderFunctionArgs, { sdk }: Context) => {
   const url = new URL(request.url);
   const offset = Number(url.searchParams.get('offset')) || 0;
 
   return sdk.currentUser.playlists.playlists(20, offset);
 };
 
-export const clientAction = async ({ request }: Route.ClientActionArgs) => {
+export const clientAction = async ({ request }: ActionFunctionArgs) => {
   const data = await request.formData();
   const playlists = data.getAll('playlist');
 
@@ -41,7 +46,8 @@ export const clientAction = async ({ request }: Route.ClientActionArgs) => {
   return redirect('/app/play');
 };
 
-export default function AppIndex({ loaderData }: Route.ComponentProps) {
+export default function AppIndex() {
+  const loaderData = useLoaderData<typeof clientLoader>();
   const t = useStore(messages);
   const { state } = useNavigation();
   const [selected, setSelected] = useState<string[]>([]);

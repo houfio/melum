@@ -1,10 +1,11 @@
 import { redirect } from 'react-router';
-import { getSpotify } from '~/utils/getSpotify';
+import type { Context } from '~/main';
+import { middleware } from '~/utils/middleware';
 
-export const clientLoader = async () => {
-  const spotify = await getSpotify();
+export const handle = { middleware };
 
-  spotify.logOut();
+export const clientLoader = async (_: unknown, { sdk }: Context) => {
+  sdk.logOut();
 
   return redirect('/');
 };
